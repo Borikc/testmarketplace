@@ -2,7 +2,56 @@ const express = require('express');
 const router = express.Router();
 const db3 = require('./db'); // Импорт модуля базы данных
 
-// Создание заказа
+/**
+ * @swagger
+ * tags:
+ *   name: Заказы
+ *   description: Управление заказами пользователей
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Order:
+ *       type: object
+ *       properties:
+ *         user_id:
+ *           type: integer
+ *           description: Идентификатор пользователя, оформившего заказ
+ *         cart_id:
+ *           type: integer
+ *           description: Идентификатор корзины, связанной с заказом
+ *       required:
+ *         - user_id
+ *         - cart_id
+ */
+
+/**
+ * @swagger
+ * /orders:
+ *   post:
+ *     summary: Создать заказ
+ *     tags: [Заказы]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Order'
+ *     responses:
+ *       201:
+ *         description: Заказ создан успешно
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 orderId:
+ *                   type: integer
+ */
 router.post('/orders', async (req, res) => {
     try {
         const { userId, cartId, /* Другие данные заказа */ } = req.body;
@@ -18,7 +67,36 @@ router.post('/orders', async (req, res) => {
     }
 });
 
-// Обновление заказа
+/**
+ * @swagger
+ * /orders/{orderId}:
+ *   put:
+ *     summary: Обновить заказ
+ *     tags: [Заказы]
+ *     parameters:
+ *       - in: path
+ *         name: orderId
+ *         required: true
+ *         description: Идентификатор заказа
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Order'
+ *     responses:
+ *       200:
+ *         description: Заказ обновлен успешно
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 router.put('/orders/:orderId', async (req, res) => {
     try {
         const { orderId } = req.params;
@@ -35,7 +113,30 @@ router.put('/orders/:orderId', async (req, res) => {
     }
 });
 
-// Удаление заказа
+/**
+ * @swagger
+ * /orders/{orderId}:
+ *   delete:
+ *     summary: Удалить заказ
+ *     tags: [Заказы]
+ *     parameters:
+ *       - in: path
+ *         name: orderId
+ *         required: true
+ *         description: Идентификатор заказа
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Заказ удален успешно
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 router.delete('/orders/:orderId', async (req, res) => {
     try {
         const { orderId } = req.params;
@@ -52,24 +153,3 @@ router.delete('/orders/:orderId', async (req, res) => {
 });
 
 module.exports = router;
-
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     OrderCreate:
- *       type: object
- *       properties:
- *         userId:
- *           type: integer
- *           description: ID пользователя, создающего заказ
- *         cartId:
- *           type: integer
- *           description: ID корзины, связанной с заказом
- *         // Другие поля заказа
- *       required:
- *         - userId
- *         - cartId
- *         // Укажите другие обязательные поля
- */

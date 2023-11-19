@@ -2,7 +2,77 @@ const express = require('express');
 const router = express.Router();
 const db4 = require('./db'); // Импорт модуля базы данных
 
-// Создание пользователя
+/**
+ * @swagger
+ * tags:
+ *   name: Пользователи
+ *   description: Управление пользователями
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         first_name:
+ *           type: string
+ *           description: Имя пользователя
+ *         last_name:
+ *           type: string
+ *           description: Фамилия пользователя
+ *         email:
+ *           type: string
+ *           description: Адрес электронной почты пользователя
+ *         password:
+ *           type: string
+ *           description: Пароль пользователя
+ *         user_type:
+ *           type: string
+ *           description: Тип пользователя (например, "customer" или "seller")
+ *         address:
+ *           type: string
+ *           description: Адрес пользователя
+ *         phone:
+ *           type: string
+ *           description: Номер телефона пользователя
+ *         profile_picture:
+ *           type: string
+ *           description: Ссылка на изображение профиля пользователя
+ *       required:
+ *         - first_name
+ *         - last_name
+ *         - email
+ *         - password
+ *         - user_type
+ */
+
+/**
+ * @swagger
+ * /users:
+ *   post:
+ *     summary: Создать пользователя
+ *     tags: [Пользователи]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       201:
+ *         description: Пользователь создан успешно
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 userId:
+ *                   type: integer
+ */
 router.post('/users', async (req, res) => {
     try {
         const { first_name, last_name, email, password, user_type, address, phone, profile_picture } = req.body;
@@ -18,7 +88,36 @@ router.post('/users', async (req, res) => {
     }
 });
 
-// Обновление пользователя
+/**
+ * @swagger
+ * /users/{userId}:
+ *   put:
+ *     summary: Обновить пользователя
+ *     tags: [Пользователи]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: Идентификатор пользователя
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: Пользователь обновлен успешно
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 router.put('/users/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
@@ -35,7 +134,30 @@ router.put('/users/:userId', async (req, res) => {
     }
 });
 
-// Удаление пользователя
+/**
+ * @swagger
+ * /users/{userId}:
+ *   delete:
+ *     summary: Удалить пользователя
+ *     tags: [Пользователи]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: Идентификатор пользователя
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Пользователь удален успешно
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 router.delete('/users/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
@@ -52,31 +174,3 @@ router.delete('/users/:userId', async (req, res) => {
 });
 
 module.exports = router;
-
-/**
- * @swagger
- * /users:
- *   post:
- *     summary: Создать пользователя
- *     tags:
- *       - Пользователи
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UserCreate' # Ссылка на схему пользователя
- *     responses:
- *       201:
- *         description: Пользователь создан успешно
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 userId:
- *                   type: integer
- */
-

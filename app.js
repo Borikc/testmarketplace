@@ -9,6 +9,7 @@ const userRoutes = require('./routes/userRoutes');
 const cardRoutes = require('./routes/cardRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const cartRoutes = require('./routes/cartRoutes');
+const itemRoutes = require('./routes/itemRoutes');
 
 // Импортируйте аннотации Swagger из ваших маршрутных файлов (необязательно, если они уже в ваших файлах)
 const swaggerDefinition = {
@@ -22,7 +23,7 @@ const swaggerDefinition = {
 
 const options = {
     swaggerDefinition,
-    apis: ['userRoutes.js', 'cardRoutes.js', 'orderRoutes.js'], // Укажите ваши маршрутные файлы
+    apis: ['routes/userRoutes.js', 'routes/cardRoutes.js', 'routes/orderRoutes.js', "routes/cartRoutes.js", "routes/itemRoutes.js"],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
@@ -34,9 +35,10 @@ app.use('/api/users', userRoutes);
 app.use('/api/cards', cardRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/carts', cartRoutes);
+app.use('/api/items', itemRoutes);
 
 // Запустите сервер
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 3080;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

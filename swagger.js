@@ -9,9 +9,15 @@ const options = {
             description: 'API for managing carts, orders, and users in the marketplace',
         },
     },
-    apis: ['app.js'], // Замените на путь к вашему файлу с маршрутами Express.js
+    apis: ['cardRoutes.js', 'cartRoutes.js', 'orderRoutes.js', 'userRoutes.js'], // Используйте один массив и перечислите ваши файлы маршрутов
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
 module.exports = swaggerSpec;
+
+//Добавить Swagger по всем маршрутам
+// Path: cardRoutes.js, cartRoutes.js, orderRoutes.js, userRoutes.js, itemRoutes.js
+// const express = require('express');
+// const router = express.Router();
+// const db = require('./db'); // Импорт модуля базы данных

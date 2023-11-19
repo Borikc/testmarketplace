@@ -2,7 +2,52 @@ const express = require('express');
 const router = express.Router();
 const db1 = require('./db'); // Импорт модуля базы данных
 
-// Создание корзины
+/**
+ * @swagger
+ * tags:
+ *   name: Корзины
+ *   description: Управление корзинами пользователей
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Cart:
+ *       type: object
+ *       properties:
+ *         user_id:
+ *           type: integer
+ *           description: Идентификатор пользователя, к которому привязана корзина
+ *       required:
+ *         - user_id
+ */
+
+/**
+ * @swagger
+ * /carts:
+ *   post:
+ *     summary: Создать корзину
+ *     tags: [Корзины]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Cart'
+ *     responses:
+ *       201:
+ *         description: Корзина создана успешно
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 cartId:
+ *                   type: integer
+ */
 router.post('/carts', async (req, res) => {
     try {
         const { userId } = req.body;
@@ -18,7 +63,36 @@ router.post('/carts', async (req, res) => {
     }
 });
 
-// Обновление корзины
+/**
+ * @swagger
+ * /carts/{cartId}:
+ *   put:
+ *     summary: Обновить корзину
+ *     tags: [Корзины]
+ *     parameters:
+ *       - in: path
+ *         name: cartId
+ *         required: true
+ *         description: Идентификатор корзины
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Cart'
+ *     responses:
+ *       200:
+ *         description: Корзина обновлена успешно
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 router.put('/carts/:cartId', async (req, res) => {
     try {
         const { cartId } = req.params;
@@ -35,7 +109,30 @@ router.put('/carts/:cartId', async (req, res) => {
     }
 });
 
-// Удаление корзины
+/**
+ * @swagger
+ * /carts/{cartId}:
+ *   delete:
+ *     summary: Удалить корзину
+ *     tags: [Корзины]
+ *     parameters:
+ *       - in: path
+ *         name: cartId
+ *         required: true
+ *         description: Идентификатор корзины
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Корзина удалена успешно
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 router.delete('/carts/:cartId', async (req, res) => {
     try {
         const { cartId } = req.params;
@@ -52,80 +149,3 @@ router.delete('/carts/:cartId', async (req, res) => {
 });
 
 module.exports = router;
-
-/**
- * @swagger
- * /carts:
- *   post:
- *     summary: Создать корзину
- *     tags:
- *       - Корзины
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/CartCreate' # Ссылка на схему корзины
- *     responses:
- *       201:
- *         description: Корзина создана успешно
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 cartId:
- *                   type: integer
- */
-
-// Маршрут для обновления корзины
-/**
- * @swagger
- * /carts/{cartId}:
- *   put:
- *     summary: Обновить корзину
- *     tags:
- *       - Корзины
- *     parameters:
- *       - in: path
- *         name: cartId
- *         required: true
- *         description: Идентификатор корзины
- *         schema:
- *           type: integer
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/CartUpdate' # Ссылка на схему обновления корзины
- *     responses:
- *       200:
- *         description: Корзина обновлена успешно
- *       404:
- *         description: Корзина не найдена
- */
-
-// Маршрут для удаления корзины
-/**
- * @swagger
- * /carts/{cartId}:
- *   delete:
- *     summary: Удалить корзину
- *     tags:
- *       - Корзины
- *     parameters:
- *       - in: path
- *         name: cartId
- *         required: true
- *         description: Идентификатор корзины
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: Корзина удалена успешно
- *       404:
- *         description: Корзина не найдена
- */

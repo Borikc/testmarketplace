@@ -2,7 +2,52 @@ const express = require('express');
 const router = express.Router();
 const db2 = require('./db'); // Импорт модуля базы данных
 
-// Создание карты
+/**
+ * @swagger
+ * tags:
+ *   name: Карты
+ *   description: Управление банковскими картами пользователей
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Card:
+ *       type: object
+ *       properties:
+ *         user_id:
+ *           type: integer
+ *           description: Идентификатор пользователя, которому принадлежит карта
+ *       required:
+ *         - user_id
+ */
+
+/**
+ * @swagger
+ * /cards:
+ *   post:
+ *     summary: Создать карту
+ *     tags: [Карты]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Card'
+ *     responses:
+ *       201:
+ *         description: Карта создана успешно
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 cardId:
+ *                   type: integer
+ */
 router.post('/cards', async (req, res) => {
     try {
         const { userId, /* Другие данные карты */ } = req.body;
@@ -18,7 +63,36 @@ router.post('/cards', async (req, res) => {
     }
 });
 
-// Обновление карты
+/**
+ * @swagger
+ * /cards/{cardId}:
+ *   put:
+ *     summary: Обновить карту
+ *     tags: [Карты]
+ *     parameters:
+ *       - in: path
+ *         name: cardId
+ *         required: true
+ *         description: Идентификатор карты
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Card'
+ *     responses:
+ *       200:
+ *         description: Карта обновлена успешно
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 router.put('/cards/:cardId', async (req, res) => {
     try {
         const { cardId } = req.params;
@@ -35,7 +109,30 @@ router.put('/cards/:cardId', async (req, res) => {
     }
 });
 
-// Удаление карты
+/**
+ * @swagger
+ * /cards/{cardId}:
+ *   delete:
+ *     summary: Удалить карту
+ *     tags: [Карты]
+ *     parameters:
+ *       - in: path
+ *         name: cardId
+ *         required: true
+ *         description: Идентификатор карты
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Карта удалена успешно
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 router.delete('/cards/:cardId', async (req, res) => {
     try {
         const { cardId } = req.params;
@@ -52,32 +149,3 @@ router.delete('/cards/:cardId', async (req, res) => {
 });
 
 module.exports = router;
-
-/**
- * @swagger
- * /cards:
- *   post:
- *     summary: Создать карту
- *     tags:
- *       - Карты
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/CardCreate' # Ссылка на схему карты
- *     responses:
- *       201:
- *         description: Карта создана успешно
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 cardId:
- *                   type: integer
- */
-
-// Другие маршруты для карт
