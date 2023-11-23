@@ -1,0 +1,320 @@
+openapi: 3.0.0
+info:
+  title: Управление картами, пользователями, заказами и товарами
+  description: API для управления банковскими картами, пользователями, заказами и товарами
+  version: 1.0.0
+
+tags:
+  - name: Карты
+    description: Управление банковскими картами пользователей
+  - name: Пользователи
+    description: Управление пользователями
+  - name: Заказы
+    description: Управление заказами
+  - name: Товары
+    description: Управление товарами
+  - name: Корзины
+    description: Управление корзинами
+
+paths:
+  /card:
+    post:
+      summary: Создать карту
+      tags: [Карты]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Card'
+      responses:
+        '201':
+          description: Карта создана успешно
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  cardId:
+                    type: integer
+
+  /card/{cardId}:
+    put:
+      summary: Обновить карту
+      tags: [Карты]
+      parameters:
+        - in: path
+          name: cardId
+          required: true
+          description: Идентификатор карты
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Card'
+      responses:
+        '200':
+          description: Карта обновлена успешно
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /users:
+    post:
+      summary: Создать пользователя
+      tags: [Пользователи]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Пользователь создан успешно
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  userId:
+                    type: integer
+
+  /users/{userId}:
+    put:
+      summary: Обновить пользователя
+      tags: [Пользователи]
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Пользователь обновлен успешно
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /orders:
+    post:
+      summary: Создать заказ
+      tags: [Заказы]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '201':
+          description: Заказ создан успешно
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type:
+                      string
+                  orderId:
+                    type: integer
+
+  /orders/{orderId}:
+    put:
+      summary: Обновить заказ
+      tags: [Заказы]
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          description: Идентификатор заказа
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: Заказ обновлен успешно
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /products:
+    post:
+      summary: Создать товар
+      tags: [Товары]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Товар создан успешно
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  productId:
+                    type: integer
+
+  /products/{productId}:
+    put:
+      summary: Обновить товар
+      tags: [Товары]
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          description: Идентификатор товара
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Товар обновлен успешно
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /carts:
+    post:
+      summary: Создать корзину
+      tags: [Корзины]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      responses:
+        '201':
+          description: Корзина создана успешно
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  cartId:
+                    type: integer
+
+  /carts/{cartId}:
+    put:
+      summary: Обновить корзину
+      tags: [Корзины]
+      parameters:
+        - in: path
+          name: cartId
+          required: true
+          description: Идентификатор корзины
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Cart'
+      responses:
+        '200':
+          description: Корзина обновлена успешно
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    Card:
+      type: object
+      properties:
+        cardNumber:
+          type: string
+        expirationDate:
+          type: string
+        cvv:
+          type: string
+
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+
+    Order:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+
+    Cart:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        total:
+          type: number
