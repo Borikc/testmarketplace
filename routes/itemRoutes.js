@@ -50,6 +50,13 @@ const db = require('./db'); // Подключаем модуль базы дан
  *         - stockquantity
  *         - sellerid
  *         - addeddate
+ *         - productlocation
+ *         - condition
+ *         - attributes
+ *         - images
+ *         - category
+ *         - brand
+ *         - description
  */
 
 class ProductItemModel {

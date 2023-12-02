@@ -16,11 +16,11 @@ const db1 = require('./db'); // Импорт модуля базы данных
  *     Cart:
  *       type: object
  *       properties:
- *         user_id:
+ *         userid:
  *           type: integer
  *           description: Идентификатор пользователя, к которому привязана корзина
  *       required:
- *         - user_id
+ *         - userid
  */
 
 /**
@@ -50,11 +50,11 @@ const db1 = require('./db'); // Импорт модуля базы данных
  */
 router.post('/carts', async (req, res) => {
     try {
-        const { userId } = req.body;
+        const { userid } = req.body;
 
         // Выполните SQL-запрос для создания корзины в базе данных
-        const query = 'INSERT INTO carts (user_id) VALUES ($1) RETURNING id';
-        const result = await db1.one(query, [userId]);
+        const query = 'INSERT INTO carts (userid) VALUES ($1) RETURNING id';
+        const result = await db1.one(query, [userid]);
 
         res.status(201).json({ message: 'Cart created successfully', cartId: result.id });
     } catch (error) {

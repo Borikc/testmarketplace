@@ -16,8 +16,3 @@ const swaggerSpec = swaggerJSDoc(options);
 
 module.exports = swaggerSpec;
 
-//Добавить Swagger по всем маршрутам
-// Path: cardRoutes.js, cartRoutes.js, orderRoutes.js, userRoutes.js, itemRoutes.js
-// const express = require('express');
-// const router = express.Router();
-// const db = require('./db'); // Импорт модуля базы данных
