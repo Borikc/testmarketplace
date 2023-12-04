@@ -172,5 +172,45 @@ router.delete('/users/:userId', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+/**
+ * @swagger
+ * /users/{userId}:
+ *   get:
+ *     summary: Получить информацию о пользователе по ID
+ *     tags: [Пользователи]
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: Идентификатор пользователя
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Информация о пользователе успешно получена
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+router.get('/users/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        // Выполните SQL-запрос для получения информации о пользователе по ID из базы данных
+        const query = 'SELECT * FROM users WHERE user_id = $1';
+        const user = await db4.oneOrNone(query, [userId]);
+
+        if (user) {
+            res.status(200).json(user);
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 
 module.exports = router;

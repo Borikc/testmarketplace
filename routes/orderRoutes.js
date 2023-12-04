@@ -151,5 +151,45 @@ router.delete('/orders/:orderId', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+/**
+ * @swagger
+ * /orders/{orderId}:
+ *   get:
+ *     summary: Получить информацию о заказе по ID
+ *     tags: [Заказы]
+ *     parameters:
+ *       - in: path
+ *         name: orderId
+ *         required: true
+ *         description: Идентификатор заказа
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Информация о заказе успешно получена
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Order'
+ */
+router.get('/orders/:orderId', async (req, res) => {
+    try {
+        const { orderId } = req.params;
+
+        // Выполните SQL-запрос для получения информации о заказе по ID из базы данных
+        const query = 'SELECT * FROM orders WHERE id = $1';
+        const order = await db3.oneOrNone(query, [orderId]);
+
+        if (order) {
+            res.status(200).json(order);
+        } else {
+            res.status(404).json({ message: 'Order not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 
 module.exports = router;

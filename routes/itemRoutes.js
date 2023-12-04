@@ -1,3 +1,5 @@
+const express = require('express');
+const router = express.Router();
 const db = require('./db'); // Подключаем модуль базы данных
 
 /**
@@ -244,5 +246,43 @@ class ProductItemModel {
         }
     }
 }
+/**
+ * @swagger
+ * /products/{productId}:
+ *   get:
+ *     summary: Получить информацию о товаре по ID
+ *     tags: [Товары]
+ *     parameters:
+ *       - in: path
+ *         name: productId
+ *         required: true
+ *         description: Идентификатор товара
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Информация о товаре успешно получена
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ProductItem'
+ */
+router.get('/products/:productId', async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const productItemModel = new ProductItemModel();
+        const product = await productItemModel.getProductItem(productId);
+
+        if (product) {
+            res.status(200).json(product);
+        } else {
+            res.status(404).json({ message: 'Product not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 
 module.exports = ProductItemModel;

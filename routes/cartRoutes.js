@@ -1,6 +1,7 @@
+// File: routes/cartRoutes.js
 const express = require('express');
 const router = express.Router();
-const db1 = require('./db'); // Импорт модуля базы данных
+const db1 = require('./db'); // Import the database module
 
 /**
  * @swagger
@@ -52,7 +53,7 @@ router.post('/carts', async (req, res) => {
     try {
         const { userid } = req.body;
 
-        // Выполните SQL-запрос для создания корзины в базе данных
+        // Execute SQL query to create a cart in the database
         const query = 'INSERT INTO carts (userid) VALUES ($1) RETURNING id';
         const result = await db1.one(query, [userid]);
 
@@ -96,10 +97,10 @@ router.post('/carts', async (req, res) => {
 router.put('/carts/:cartId', async (req, res) => {
     try {
         const { cartId } = req.params;
-        const { /* Получите данные для обновления из req.body */ } = req.body;
+        const { /* Get update data from req.body */ } = req.body;
 
-        // Выполните SQL-запрос для обновления корзины в базе данных
-        const query = 'UPDATE carts SET /* Укажите поля и значения для обновления */ WHERE id = $1';
+        // Execute SQL query to update the cart in the database
+        const query = 'UPDATE carts SET /* Specify fields and values for update */ WHERE id = $1';
         await db1.none(query, [cartId]);
 
         res.status(200).json({ message: 'Cart updated successfully' });
@@ -137,7 +138,7 @@ router.delete('/carts/:cartId', async (req, res) => {
     try {
         const { cartId } = req.params;
 
-        // Выполните SQL-запрос для удаления корзины из базы данных
+        // Execute SQL query to delete the cart from the database
         const query = 'DELETE FROM carts WHERE id = $1';
         await db1.none(query, [cartId]);
 
@@ -147,5 +148,58 @@ router.delete('/carts/:cartId', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+
+/**
+ * @swagger
+ * /carts/{cartId}:
+ *   get:
+ *     summary: Получить информацию о корзине по ID
+ *     tags: [Корзины]
+ *     parameters:
+ *       - in: path
+ *         name: cartId
+ *         required: true
+ *         description: Идентификатор корзины
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Информация о корзине успешно получена
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Cart'
+ */
+router.get('/carts/:cartId', async (req, res) => {
+    try {
+        const { cartId } = req.params;
+        const cart = await getCart(cartId);
+
+        if (!cart) {
+            return res.status(404).json({ message: 'Cart not found' });
+        }
+
+        res.status(200).json(cart);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+/**
+ * Получить информацию о корзине по ID
+ * @param {number} cartId - Идентификатор корзины
+ * @returns {Promise<object|null>} Информация о корзине или null, если не найдено
+ */
+async function getCart(cartId) {
+    try {
+        const query = 'SELECT * FROM carts WHERE id = $1';
+        const result = await db1.oneOrNone(query, [cartId]);
+        return result;
+    } catch (error) {
+        console.error('Error in getCart:', error.message);
+        throw error;
+    }
+}
 
 module.exports = router;

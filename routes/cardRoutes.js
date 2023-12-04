@@ -115,5 +115,41 @@ router.delete('/cards/:cardId', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+/**
+ * @swagger
+ * /cards/{cardId}:
+ *   get:
+ *     summary: Получить информацию о карте по ID
+ *     tags: [Карты]
+ *     parameters:
+ *       - in: path
+ *         name: cardId
+ *         required: true
+ *         description: Идентификатор карты
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Информация о карте успешно получена
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Card'
+ */
+router.get('/cards/:cardId', async (req, res) => {
+    try {
+        const { cardId } = req.params;
+        const cardModel = new CardModel();
+        const card = await cardModel.getCard(cardId);
 
+        if (card) {
+            res.status(200).json(card);
+        } else {
+            res.status(404).json({ message: 'Card not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 module.exports = router;
